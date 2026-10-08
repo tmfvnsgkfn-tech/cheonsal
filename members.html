@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>길드원 | 천살</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .member-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .member-table th {
+            color: #d8b36a;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: left;
+            padding: 16px 12px;
+            border-bottom: 1px solid #343945;
+        }
+
+        .member-table td {
+            padding: 18px 12px;
+            border-bottom: 1px solid #242933;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .member-table tr:hover td {
+            background: #141922;
+        }
+
+        .member-name {
+            color: #fff !important;
+            font-weight: 700;
+        }
+
+        .member-role {
+            color: #d8b36a !important;
+        }
+
+        .power {
+            color: #ddd !important;
+            font-weight: 700;
+        }
+
+        .class-badge {
+            display: inline-block;
+            padding: 4px 9px;
+            border: 1px solid #343945;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .member-note {
+            margin-top: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        @media(max-width: 700px) {
+
+            .member-table {
+                min-width: 650px;
+            }
+
+            .member-table-wrap {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="header-inner">
+
+        <a href="index.html" class="logo">
+            <span>CHEONSAL</span>
+        </a>
+
+        <nav>
+            <a href="index.html">HOME</a>
+            <a href="guild.html">길드소개</a>
+            <a href="notice.html">공지사항</a>
+            <a href="content.html">콘텐츠</a>
+            <a href="members.html" class="active">길드원</a>
+            <a href="join.html">가입안내</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<div class="container">
+
+    <div class="page-title">
+
+        <div class="label">
+            GUILD MEMBERS
+        </div>
+
+        <h1>
+            길드원
+        </h1>
+
+        <p>
+            천살에서 함께하는 길드원입니다.
+        </p>
+
+    </div>
+
+
+    <div class="content">
+
+        <div class="box">
+
+            <h2>
+                GUILD MEMBERS
+            </h2>
+
+            <p>
+                현재 길드원 명단입니다.
+                전투력 및 직업 정보는 상황에 따라 업데이트됩니다.
+            </p>
+
+
+            <div class="member-table-wrap">
+
+                <table class="member-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>NO.</th>
+                            <th>닉네임</th>
+                            <th>직업</th>
+                            <th>전투력</th>
+                            <th>역할</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>01</td>
+
+                            <td class="member-name">
+                                힐제나
+                            </td>
+
+                            <td>
+                                <span class="class-badge">
+                                    -
+                                </span>
+                            </td>
+
+                            <td class="power">
+                                -
+                            </td>
+
+                            <td class="member-role">
+                                길드마스터
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>02</td>
+
+                            <td class="member-name">
+                                신탄
+                            </td>
+
+                            <td>
+                                <span class="class-badge">
+                                    아티산
+                                </span>
+                            </td>
+
+                            <td class="power">
+                                -
+                            </td>
+
+                            <td class="member-role">
+                                운영진
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>03</td>
+
+                            <td class="member-name">
+                                문섹
+                            </td>
+
+                            <td>
+                                <span class="class-badge">
+                                    -
+                                </span>
+                            </td>
+
+                            <td class="power">
+                                -
+                            </td>
+
+                            <td class="member-role">
+                                운영진
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>04</td>
+
+                            <td class="member-name">
+                                순심심
+                            </td>
+
+                            <td>
+                                <span class="class-badge">
+                                    -
+                                </span>
+                            </td>
+
+                            <td class="power">
+                                -
+                            </td>
+
+                            <td class="member-role">
+                                운영진
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>05</td>
+
+                            <td class="member-name">
+                                남덕
+                            </td>
+
+                            <td>
+                                <span class="class-badge">
+                                    -
+                                </span>
+                            </td>
+
+                            <td class="power">
+                                -
+                            </td>
+
+                            <td class="member-role">
+                                운영진
+                            </td>
+
+                        </tr>
+
+
+                        <!--
+                        ====================================
+                        길드원 추가 예시
+
+                        <tr>
+
+                            <td>06</td>
+
+                            <td class="member-name">
+                                닉네임
+                            </td>
+
+                            <td>
+                                <span class="class-badge">
+                                    직업
+                                </span>
+                            </td>
+
+                            <td class="power">
+                                50,000
+                            </td>
+
+                            <td>
+                                길드원
+                            </td>
+
+                        </tr>
+
+                        ====================================
+                        -->
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="member-note">
+                ※ 길드원 정보는 게임 상황에 따라 변경될 수 있습니다.
+            </div>
+
+        </div>
+
+
+        <!-- 운영진 -->
+
+        <div class="box">
+
+            <h2>
+                운영진
+            </h2>
+
+            <div class="staff">
+
+                <div class="staff-card">
+
+                    <div class="role">
+                        GUILD MASTER
+                    </div>
+
+                    <div class="name">
+                        힐제나
+                    </div>
+
+                </div>
+
+
+                <div class="staff-card">
+
+                    <div class="role">
+                        STAFF
+                    </div>
+
+                    <div class="name">
+                        신탄
+                    </div>
+
+                </div>
+
+
+                <div class="staff-card">
+
+                    <div class="role">
+                        STAFF
+                    </div>
+
+                    <div class="name">
+                        문섹
+                    </div>
+
+                </div>
+
+
+                <div class="staff-card">
+
+                    <div class="role">
+                        STAFF
+                    </div>
+
+                    <div class="name">
+                        순심심
+                    </div>
+
+                </div>
+
+
+                <div class="staff-card">
+
+                    <div class="role">
+                        STAFF
+                    </div>
+
+                    <div class="name">
+                        남덕
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</main>
+
+
+<footer>
+
+    <strong style="letter-spacing:4px;">
+        CHEONSAL
+    </strong>
+
+    <br><br>
+
+    제우스 오만의신 · 천살 길드
+
+    <br><br>
+
+    © 2026 CHEONSAL GUILD
+
+</footer>
+
+
+</body>
+</html>
