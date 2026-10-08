@@ -1,283 +1,923 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>천살 길드</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<title>천살 | 제우스 오만의신</title>
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #0b0d12;
-      color: #fff;
-    }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
 
-    header {
-      height: 70px;
-      background: #11141c;
-      border-bottom: 1px solid #292e3a;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 8%;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    .logo {
-      font-size: 25px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
+html {
+    scroll-behavior: smooth;
+}
 
-    nav a {
-      color: #aaa;
-      text-decoration: none;
-      margin-left: 30px;
-      font-size: 14px;
-    }
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: #07090d;
+    color: #fff;
+    line-height: 1.6;
+}
 
-    nav a:hover {
-      color: #fff;
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 76px;
+    z-index: 999;
+
+    background: rgba(5, 7, 11, 0.82);
+    backdrop-filter: blur(14px);
+
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.header-inner {
+    max-width: 1250px;
+    height: 100%;
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 25px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 4px;
+}
+
+.logo span {
+    color: #d8b36a;
+}
+
+nav {
+    display: flex;
+    gap: 32px;
+}
+
+nav a {
+    color: #aaa;
+    font-size: 14px;
+    transition: 0.25s;
+}
+
+nav a:hover {
+    color: #fff;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    min-height: 850px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    position: relative;
+    overflow: hidden;
+
+    background:
+        radial-gradient(circle at 50% 35%, rgba(148,110,48,0.28), transparent 30%),
+        radial-gradient(circle at 20% 80%, rgba(45,65,110,0.18), transparent 30%),
+        linear-gradient(180deg, #0d1119 0%, #07090d 100%);
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(0,0,0,0.05),
+            rgba(0,0,0,0.75)
+        );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+}
+
+.hero-small {
+    color: #d8b36a;
+    font-size: 14px;
+    letter-spacing: 7px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(70px, 12vw, 150px);
+    font-weight: 900;
+    letter-spacing: 18px;
+
+    background: linear-gradient(
+        180deg,
+        #fff 0%,
+        #d8d8d8 40%,
+        #9b9b9b 100%
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-shadow: 0 0 50px rgba(255,255,255,0.08);
+}
+
+.hero-sub {
+    margin-top: 10px;
+    color: #aaa;
+    font-size: 18px;
+    letter-spacing: 4px;
+}
+
+.hero-line {
+    width: 70px;
+    height: 1px;
+    background: #d8b36a;
+    margin: 35px auto;
+}
+
+.hero-description {
+    color: #888;
+    font-size: 14px;
+}
+
+.hero-buttons {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 13px 28px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: 0.25s;
+}
+
+.btn-main {
+    background: #d8b36a;
+    color: #111;
+}
+
+.btn-main:hover {
+    background: #f0d18c;
+    transform: translateY(-2px);
+}
+
+.btn-dark {
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #ddd;
+    background: rgba(255,255,255,0.04);
+}
+
+.btn-dark:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* =========================
+   COMMON
+========================= */
+
+section {
+    max-width: 1250px;
+    margin: auto;
+    padding: 110px 25px;
+}
+
+.section-label {
+    color: #d8b36a;
+    font-size: 12px;
+    letter-spacing: 5px;
+    margin-bottom: 12px;
+}
+
+.section-title {
+    font-size: 38px;
+    font-weight: 900;
+    margin-bottom: 15px;
+}
+
+.section-desc {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 45px;
+}
+
+/* =========================
+   ABOUT
+========================= */
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 30px;
+}
+
+.about-box {
+    background: linear-gradient(
+        145deg,
+        #11151d,
+        #0b0e13
+    );
+
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 38px;
+    border-radius: 8px;
+}
+
+.about-box h3 {
+    font-size: 23px;
+    margin-bottom: 18px;
+}
+
+.about-box p {
+    color: #8b8b8b;
+    font-size: 14px;
+    line-height: 2;
+}
+
+.master {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+.master strong {
+    color: #d8b36a;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content-section {
+    max-width: none;
+    background: #0b0e13;
+}
+
+.content-inner {
+    max-width: 1250px;
+    margin: auto;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.card {
+    min-height: 210px;
+    padding: 30px;
+
+    background: #10141b;
+    border: 1px solid rgba(255,255,255,0.07);
+
+    border-radius: 8px;
+
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(216,179,106,0.4);
+}
+
+.card-number {
+    color: #555;
+    font-size: 12px;
+    margin-bottom: 25px;
+}
+
+.card h3 {
+    font-size: 21px;
+    margin-bottom: 12px;
+}
+
+.card p {
+    color: #777;
+    font-size: 13px;
+}
+
+/* =========================
+   STAFF
+========================= */
+
+.staff {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.staff-card {
+    background: #10141b;
+    border: 1px solid rgba(255,255,255,0.07);
+    padding: 28px 15px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.staff-role {
+    color: #d8b36a;
+    font-size: 11px;
+    margin-bottom: 8px;
+}
+
+.staff-name {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+/* =========================
+   NOTICE
+========================= */
+
+.notice-section {
+    background: #0b0e13;
+    max-width: none;
+}
+
+.notice-inner {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.notice {
+    border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+.notice-item {
+    display: flex;
+    align-items: center;
+
+    padding: 23px 10px;
+
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+
+    color: #bbb;
+    font-size: 14px;
+}
+
+.notice-num {
+    color: #d8b36a;
+    width: 55px;
+}
+
+.notice-date {
+    margin-left: auto;
+    color: #555;
+    font-size: 12px;
+}
+
+/* =========================
+   JOIN
+========================= */
+
+.join {
+    text-align: center;
+    padding: 140px 25px;
+}
+
+.join h2 {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.join p {
+    color: #777;
+    margin-bottom: 35px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    border-top: 1px solid rgba(255,255,255,0.07);
+
+    padding: 40px 20px;
+
+    text-align: center;
+
+    color: #444;
+    font-size: 12px;
+}
+
+.footer-logo {
+    color: #777;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width: 850px) {
+
+    nav {
+        display: none;
     }
 
     .hero {
-      min-height: 650px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      background:
-        radial-gradient(circle at center, #242b3b 0%, #0b0d12 65%);
-      padding: 80px 20px;
+        min-height: 720px;
     }
 
     .hero h1 {
-      font-size: 72px;
-      letter-spacing: 8px;
-      margin-bottom: 20px;
+        letter-spacing: 10px;
     }
 
-    .hero p {
-      color: #aaa;
-      font-size: 18px;
-      margin-bottom: 35px;
-    }
-
-    .button {
-      display: inline-block;
-      padding: 14px 30px;
-      background: #fff;
-      color: #111;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-    }
-
-    section {
-      padding: 90px 8%;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 50px;
-    }
-
-    .section-title h2 {
-      font-size: 32px;
-      margin-bottom: 12px;
-    }
-
-    .section-title p {
-      color: #888;
+    .about-grid {
+        grid-template-columns: 1fr;
     }
 
     .cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .card {
-      background: #141821;
-      border: 1px solid #292e3a;
-      border-radius: 12px;
-      padding: 30px;
-      min-height: 180px;
-    }
-
-    .card h3 {
-      margin-bottom: 15px;
-      font-size: 20px;
-    }
-
-    .card p {
-      color: #999;
-      line-height: 1.7;
-    }
-
-    .notice {
-      background: #11141c;
-      border-top: 1px solid #292e3a;
-      border-bottom: 1px solid #292e3a;
-    }
-
-    .notice-list {
-      max-width: 800px;
-      margin: auto;
-    }
-
-    .notice-item {
-      padding: 20px 0;
-      border-bottom: 1px solid #292e3a;
-    }
-
-    .notice-item:last-child {
-      border-bottom: none;
-    }
-
-    .notice-item span {
-      color: #777;
-      font-size: 13px;
-      margin-right: 15px;
-    }
-
-    footer {
-      padding: 40px;
-      text-align: center;
-      color: #555;
-      background: #080a0e;
-    }
-
-    @media (max-width: 800px) {
-      .hero h1 {
-        font-size: 48px;
-      }
-
-      .cards {
         grid-template-columns: 1fr;
-      }
-
-      nav a {
-        margin-left: 10px;
-      }
     }
-  </style>
+
+    .staff {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .section-title {
+        font-size: 30px;
+    }
+}
+</style>
 </head>
+
 
 <body>
 
-  <header>
-    <div class="logo">CHEONSAL</div>
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+<div class="header-inner">
+
+    <div class="logo">
+        <span>CHEONSAL</span>
+    </div>
 
     <nav>
-      <a href="#about">길드소개</a>
-      <a href="#content">컨텐츠</a>
-      <a href="#notice">공지사항</a>
+        <a href="#about">길드소개</a>
+        <a href="#content">콘텐츠</a>
+        <a href="#staff">운영진</a>
+        <a href="#notice">공지사항</a>
+        <a href="#join">가입안내</a>
     </nav>
-  </header>
 
-  <section class="hero">
+</div>
+
+</header>
+
+
+<!-- =========================
+     HERO
+========================= -->
+
+<div class="hero">
+
+<div class="hero-content">
+
+    <div class="hero-small">
+        ZEUS · THE GOD OF OMAN
+    </div>
+
+    <h1>天殺</h1>
+
+    <div class="hero-sub">
+        천살 길드
+    </div>
+
+    <div class="hero-line"></div>
+
+    <div class="hero-description">
+        함께 즐기고 · 함께 성장하는 길드
+    </div>
+
+    <div class="hero-buttons">
+
+        <a href="#about" class="btn btn-main">
+            길드 알아보기
+        </a>
+
+        <a href="#join" class="btn btn-dark">
+            가입 안내
+        </a>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<section id="about">
+
+    <div class="section-label">
+        ABOUT US
+    </div>
+
+    <div class="section-title">
+        천살
+    </div>
+
+    <div class="section-desc">
+        게임을 잘하는 것보다, 게임을 함께 즐길 수 있는 길드를 지향합니다.
+    </div>
+
+
+    <div class="about-grid">
+
+        <div class="about-box">
+
+            <h3>
+                우리가 만들어가는 길드
+            </h3>
+
+            <p>
+                길드레이드, 점령전, 아카디아 제전 등
+                다양한 콘텐츠를 길드원들과 함께 즐기며
+                서로 배려하고 성장할 수 있는 환경을 만들어갑니다.
+                <br><br>
+                지나치게 빡빡한 운영보다는
+                참여하는 사람이 즐거운 길드,
+                오래 함께할 수 있는 길드를 목표로 합니다.
+            </p>
+
+        </div>
+
+
+        <div class="about-box">
+
+            <h3>
+                GUILD MASTER
+            </h3>
+
+            <p>
+                천살 길드를 이끌어가는 길드마스터와
+                운영진이 길드원분들의 원활한 게임 플레이를 위해
+                함께 운영하고 있습니다.
+            </p>
+
+            <div class="master">
+                길드마스터　
+                <strong>힐제나</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     CONTENT
+========================= -->
+
+<div class="content-section" id="content">
+
+<div class="content-inner">
+
+<section>
+
+    <div class="section-label">
+        GUILD CONTENT
+    </div>
+
+    <div class="section-title">
+        주요 콘텐츠
+    </div>
+
+    <div class="section-desc">
+        천살과 함께 즐기는 주요 길드 콘텐츠입니다.
+    </div>
+
+
+    <div class="cards">
+
+        <div class="card">
+
+            <div class="card-number">
+                CONTENT 01
+            </div>
+
+            <h3>
+                ⚔ 길드레이드
+            </h3>
+
+            <p>
+                정기적인 길드레이드를 진행하며
+                획득 아이템은 정해진 분배 기준에 따라
+                공정하게 분배합니다.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-number">
+                CONTENT 02
+            </div>
+
+            <h3>
+                🏰 점령전
+            </h3>
+
+            <p>
+                서버 상황과 길드 상황을 고려하여
+                길드원들과 함께 전략적으로
+                점령전을 진행합니다.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-number">
+                CONTENT 03
+            </div>
+
+            <h3>
+                🔥 아카디아 제전
+            </h3>
+
+            <p>
+                길드원들과 함께 다양한 콘텐츠를
+                즐기며 서버 내에서 함께 성장합니다.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-number">
+                CONTENT 04
+            </div>
+
+            <h3>
+                🎧 디스코드
+            </h3>
+
+            <p>
+                디스코드를 통해 게임을 하면서
+                자유롭게 이야기하고 함께 플레이할 수 있습니다.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-number">
+                CONTENT 05
+            </div>
+
+            <h3>
+                💬 오픈채팅
+            </h3>
+
+            <p>
+                길드 공지와 소통을 위한 오픈채팅방을
+                운영하고 있습니다.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-number">
+                CONTENT 06
+            </div>
+
+            <h3>
+                🤝 길드 커뮤니티
+            </h3>
+
+            <p>
+                게임 이야기부터 사소한 잡담까지
+                부담 없이 함께할 수 있는 커뮤니티를 지향합니다.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+</div>
+</div>
+
+
+<!-- =========================
+     STAFF
+========================= -->
+
+<section id="staff">
+
+    <div class="section-label">
+        GUILD STAFF
+    </div>
+
+    <div class="section-title">
+        운영진
+    </div>
+
+    <div class="section-desc">
+        길드와 관련된 문의사항은 운영진에게 편하게 문의해주세요.
+    </div>
+
+
+    <div class="staff">
+
+        <div class="staff-card">
+            <div class="staff-role">GUILD MASTER</div>
+            <div class="staff-name">힐제나</div>
+        </div>
+
+        <div class="staff-card">
+            <div class="staff-role">STAFF</div>
+            <div class="staff-name">신탄</div>
+        </div>
+
+        <div class="staff-card">
+            <div class="staff-role">STAFF</div>
+            <div class="staff-name">문섹</div>
+        </div>
+
+        <div class="staff-card">
+            <div class="staff-role">STAFF</div>
+            <div class="staff-name">순심심</div>
+        </div>
+
+        <div class="staff-card">
+            <div class="staff-role">STAFF</div>
+            <div class="staff-name">남덕</div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     NOTICE
+========================= -->
+
+<div class="notice-section" id="notice">
+
+<div class="notice-inner">
+
+<section>
+
+    <div class="section-label">
+        NOTICE
+    </div>
+
+    <div class="section-title">
+        길드 공지사항
+    </div>
+
+    <div class="section-desc">
+        천살의 주요 공지사항을 확인해주세요.
+    </div>
+
+
+    <div class="notice">
+
+        <div class="notice-item">
+            <div class="notice-num">01</div>
+
+            길드 주요 콘텐츠 및 일정은 길드 공지를 통해 안내드립니다.
+
+            <div class="notice-date">
+                GUILD
+            </div>
+        </div>
+
+
+        <div class="notice-item">
+            <div class="notice-num">02</div>
+
+            오픈채팅 참여는 필수이며, 디스코드는 선택입니다.
+
+            <div class="notice-date">
+                GUILD
+            </div>
+        </div>
+
+
+        <div class="notice-item">
+            <div class="notice-num">03</div>
+
+            길드 관련 문의사항은 운영진에게 문의해주세요.
+
+            <div class="notice-date">
+                GUILD
+            </div>
+        </div>
+
+
+    </div>
+
+</section>
+
+</div>
+</div>
+
+
+<!-- =========================
+     JOIN
+========================= -->
+
+<section class="join" id="join">
+
+    <div class="section-label">
+        JOIN US
+    </div>
+
+    <h2>
+        천살과 함께하시겠습니까?
+    </h2>
+
+    <p>
+        함께 게임을 즐기고 오래 함께할 길드원을 기다립니다.
+    </p>
+
+    <a href="#" class="btn btn-main">
+        가입 문의하기
+    </a>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div class="footer-logo">
+        CHEONSAL
+    </div>
+
     <div>
-      <h1>천살</h1>
-      <p>제우스 오만의신 · 천살 길드</p>
-      <a href="#about" class="button">길드 알아보기</a>
-    </div>
-  </section>
-
-  <section id="about">
-    <div class="section-title">
-      <h2>ABOUT US</h2>
-      <p>함께 즐기고, 함께 성장하는 길드</p>
+        제우스 오만의신 · 천살 길드
     </div>
 
-    <div class="cards">
-      <div class="card">
-        <h3>길드 운영</h3>
-        <p>
-          길드원들이 다양한 콘텐츠를 편하게 즐길 수 있는 환경을
-          만드는 것을 최우선으로 합니다.
-        </p>
-      </div>
+    <br>
 
-      <div class="card">
-        <h3>길드레이드</h3>
-        <p>
-          공정한 아이템 분배와 체계적인 레이드 운영을 통해
-          모든 길드원이 함께 성장합니다.
-        </p>
-      </div>
+    © 2026 CHEONSAL GUILD
 
-      <div class="card">
-        <h3>커뮤니티</h3>
-        <p>
-          오픈채팅과 디스코드를 통해 게임 이야기를 나누고
-          자유롭게 소통할 수 있습니다.
-        </p>
-      </div>
-    </div>
-  </section>
+</footer>
 
-  <section id="content" class="notice">
-    <div class="section-title">
-      <h2>GUILD CONTENT</h2>
-      <p>천살이 함께하는 주요 콘텐츠</p>
-    </div>
-
-    <div class="cards">
-      <div class="card">
-        <h3>⚔ 길드레이드</h3>
-        <p>정기적인 길드레이드 진행 및 아이템 분배</p>
-      </div>
-
-      <div class="card">
-        <h3>🏰 점령전</h3>
-        <p>서버 상황에 맞춰 전략적으로 진행합니다.</p>
-      </div>
-
-      <div class="card">
-        <h3>🔥 아카디아 제전</h3>
-        <p>길드원들과 함께 즐기는 주요 콘텐츠</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="notice">
-    <div class="section-title">
-      <h2>NOTICE</h2>
-      <p>천살 길드 공지사항</p>
-    </div>
-
-    <div class="notice-list">
-
-      <div class="notice-item">
-        <span>01</span>
-        길드레이드 및 주요 콘텐츠 일정은 길드 공지를 확인해주세요.
-      </div>
-
-      <div class="notice-item">
-        <span>02</span>
-        오픈채팅 참여는 필수이며, 디스코드는 선택입니다.
-      </div>
-
-      <div class="notice-item">
-        <span>03</span>
-        길드 관련 문의사항은 운영진에게 문의해주세요.
-      </div>
-
-    </div>
-  </section>
-
-  <footer>
-    CHEONSAL GUILD · 제우스 오만의신
-  </footer>
 
 </body>
 </html>
