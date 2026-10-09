@@ -30,6 +30,7 @@ if(!cfg?.apiKey||!cfg?.projectId||cfg.apiKey.includes('YOUR_')){
   const q=query(posts,orderBy('createdAt','desc'),limit(50));
   const opened=new Set();
   let commentUnsub=null;
+  let previewUnsubs=[];
   const renderComments=(id,article)=>{
     const comments=collection(db,'cheonsal_posts',id,'comments'),area=article.querySelector('.comments');
     if(commentUnsub)commentUnsub();
@@ -52,6 +53,7 @@ if(!cfg?.apiKey||!cfg?.projectId||cfg.apiKey.includes('YOUR_')){
   };
   onSnapshot(q,snap=>{
     $('postCount').textContent='최신 '+snap.size+'개';
+    previewUnsubs.forEach(fn=>fn());previewUnsubs=[];
     list.replaceChildren();
     if(commentUnsub){commentUnsub();commentUnsub=null}
     if(snap.empty){list.innerHTML='<p class="board-empty">아직 게시글이 없습니다. 첫 글을 남겨 주세요!</p>';return}
@@ -62,6 +64,8 @@ if(!cfg?.apiKey||!cfg?.projectId||cfg.apiKey.includes('YOUR_')){
       const expanded=opened.has(id);
       article.innerHTML='<button type="button" class="board-item-head" aria-expanded="'+expanded+'"><span class="board-number">'+(snap.size-index)+'</span><span class="board-title">'+safe(p.title)+'</span><span class="board-author">'+safe(p.nickname)+'</span><time class="board-date">'+safe(date)+'</time><span class="board-chevron">'+(expanded?'−':'+')+'</span></button><div class="board-detail" '+(expanded?'':'hidden')+'><div class="board-post-body">'+safe(p.body)+'</div><div class="board-comments-title"><strong>댓글</strong><span class="commentCount">댓글 불러오는 중</span></div><div class="comments"><p class="note">댓글 불러오는 중…</p></div><form class="commentForm"><input class="nick" maxlength="20" required placeholder="닉네임"><input class="message" maxlength="500" required placeholder="댓글을 입력하세요"><button type="submit">댓글 등록</button></form><p class="note commentStatus"></p></div>';
       list.appendChild(article);
+      const counter=document.createElement('span');counter.className='board-comment-preview';counter.textContent='💬 …';article.querySelector('.board-title').after(counter);
+      previewUnsubs.push(onSnapshot(collection(db,'cheonsal_posts',id,'comments'),ss=>{counter.textContent='💬 '+ss.size},()=>{counter.textContent='💬 -'}));
       const head=article.querySelector('.board-item-head'),detail=article.querySelector('.board-detail');
       const expand=()=>{
         for(const other of list.querySelectorAll('.board-detail')){if(other!==detail)other.hidden=true}
