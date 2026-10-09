@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  match /cheonsal_posts/{postId} {
+   allow read: if true;
+   allow create: if request.auth != null
+     && request.resource.data.keys().hasOnly(['nickname','title','body','createdAt','uid'])
+     && request.resource.data.uid == request.auth.uid
+     && request.resource.data.nickname is string && request.resource.data.nickname.size() > 0 && request.resource.data.nickname.size() <= 20
+     && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 80
+     && request.resource.data.body is string && request.resource.data.body.size() > 0 && request.resource.data.body.size() <= 3000
+     && request.resource.data.createdAt == request.time;
+   allow update, delete: if false;
+   match /comments/{commentId} {
+    allow read: if true;
+    allow create: if request.auth != null
+      && request.resource.data.keys().hasOnly(['nickname','body','createdAt','uid'])
+      && request.resource.data.uid == request.auth.uid
+      && request.resource.data.nickname is string && request.resource.data.nickname.size() > 0 && request.resource.data.nickname.size() <= 20
+      && request.resource.data.body is string && request.resource.data.body.size() > 0 && request.resource.data.body.size() <= 500
+      && request.resource.data.createdAt == request.time;
+    allow update, delete: if false;
+   }
+  }
+ }
+}
