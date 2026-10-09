@@ -6,10 +6,10 @@ import{firebaseConfig}from"./firebase-config.js?v=20261009h";
 const $=id=>document.getElementById(id),esc=s=>{const e=document.createElement("span");e.textContent=String(s??"");return e.innerHTML};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),storage=getStorage(app);
 const collectionRef=collection(db,"cheonsal_gallery");
-const ADMIN_UID="REPLACE_WITH_ADMIN_UID";
+const ADMIN_UID="4wsmGJicudaNhZh0329QQVDZy112";
 let currentUser=null,photos=[];
 const adminStatus=$("galleryAdminStatus"),grid=$("galleryGrid");
-function isAdmin(){return currentUser?.uid===ADMIN_UID&&ADMIN_UID!=="REPLACE_WITH_ADMIN_UID"}
+function isAdmin(){return currentUser?.uid===ADMIN_UID&&ADMIN_UID!=="4wsmGJicudaNhZh0329QQVDZy112"}
 function showAdmin(){const ok=isAdmin();$("adminLoggedIn").hidden=!ok;$("adminLoggedOut").hidden=ok;grid.querySelectorAll(".gallery-delete").forEach(b=>b.hidden=!ok)}
 function render(){grid.replaceChildren();const visible=photos;if(!visible.length){grid.innerHTML='<div class="gallery-empty">아직 이 카테고리에 등록된 사진이 없습니다.<p>천살의 첫 추억을 기다리고 있어요! 📸</p></div>';return}for(const p of visible){const article=document.createElement("article");article.className="gallery-card";const img=document.createElement("img");img.src=p.url;img.alt=p.title||"천살 추억";img.loading="lazy";img.addEventListener("click",()=>{$("galleryLarge").src=p.url;$("galleryDialog").showModal()});const caption=document.createElement("div");caption.className="gallery-caption";caption.innerHTML="<strong>"+esc(p.title)+"</strong><small>"+esc(p.createdAt?.toDate?.()?.toLocaleDateString("ko-KR")||"최근")+"</small>"+(p.description?"<p>"+esc(p.description)+"</p>":"");const del=document.createElement("button");del.className="gallery-delete";del.textContent="사진 삭제";del.hidden=!isAdmin();del.addEventListener("click",async()=>{if(!isAdmin()||!confirm("이 사진을 삭제할까요?"))return;try{await deleteDoc(doc(db,"cheonsal_gallery",p.id));if(p.path)await deleteObject(ref(storage,p.path));adminStatus.textContent="사진 삭제 완료"}catch(e){adminStatus.textContent="삭제 실패: "+(e.code||e.message)}});article.append(img,caption,del);grid.append(article)}}
 onSnapshot(query(collectionRef,orderBy("createdAt","desc"),limit(100)),snap=>{photos=snap.docs.map(d=>({id:d.id,...d.data()}));$("galleryStatus").textContent="천살의 추억 "+photos.length+"장";render()},e=>{$("galleryStatus").textContent="사진 조회 실패: "+(e.code||e.message)});
