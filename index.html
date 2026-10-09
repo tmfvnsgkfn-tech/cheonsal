@@ -10,6 +10,142 @@
 </head>
 
 <body>
+    
+<style>
+  #cheonsal-ranking {
+    max-width: 1100px;
+    margin: 36px auto;
+    padding: 24px;
+    border-radius: 18px;
+    background: #151c2c;
+    color: #f4f6fb;
+    font-family: Arial, sans-serif;
+  }
+  #cheonsal-ranking h2 { margin: 0 0 12px; }
+  #cheonsal-ranking .ranking-controls {
+    display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0;
+  }
+  #cheonsal-ranking input, #cheonsal-ranking select {
+    padding: 12px; border-radius: 8px; border: 1px solid #46516a;
+    background: #222d42; color: white; flex: 1; min-width: 160px;
+  }
+  #cheonsal-ranking .ranking-table-wrap { overflow-x: auto; }
+  #cheonsal-ranking table { width: 100%; border-collapse: collapse; }
+  #cheonsal-ranking th, #cheonsal-ranking td {
+    padding: 13px 10px; text-align: center;
+    border-bottom: 1px solid #344056;
+  }
+  #cheonsal-ranking th { color: #e7c47a; }
+  #cheonsal-ranking .ranking-status { color: #aebbd0; }
+</style>
+
+<section id="cheonsal-ranking">
+  <h2>⚔️ 천살 길드 전투력 랭킹</h2>
+  <p class="ranking-status" id="ranking-status">길드원 데이터를 불러오는 중...</p>
+
+  <div class="ranking-controls">
+    <select id="ranking-job">
+      <option value="">전체 직업</option>
+      <option>버서커</option>
+      <option>레인저</option>
+      <option>어쌔신</option>
+      <option>나이트</option>
+      <option>아티산</option>
+      <option>블레스드</option>
+      <option>오라클</option>
+      <option>엘리멘탈리스트</option>
+    </select>
+    <input id="ranking-search" placeholder="캐릭터명 검색">
+  </div>
+
+  <div class="ranking-table-wrap">
+    <table>
+      <thead>
+        <tr><th>순위</th><th>캐릭터명</th><th>직업</th><th>레벨</th><th>전투력</th></tr>
+      </thead>
+      <tbody id="ranking-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+(() => {
+  const sheetId = "1ai7IKTxgIhXjxiB6eI8E0D_KFdkgMGACCq7TBO_YCIA";
+  const gid = "225266656";
+  const endpoint = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&tqx=out:json`;
+
+  let members = [];
+  const jobSelect = document.getElementById("ranking-job");
+  const searchInput = document.getElementById("ranking-search");
+  const tbody = document.getElementById("ranking-body");
+  const status = document.getElementById("ranking-status");
+
+  function render() {
+    const job = jobSelect.value;
+    const keyword = searchInput.value.trim().toLowerCase();
+    const filtered = members
+      .filter(m => !job || m.job === job)
+      .sort((a, b) => b.power - a.power);
+    const visible = filtered.filter(m => m.name.toLowerCase().includes(keyword));
+
+    tbody.replaceChildren();
+    visible.forEach(m => {
+      const tr = document.createElement("tr");
+      const cells = [
+        filtered.indexOf(m) + 1,
+        m.name, m.job, m.level, m.power.toLocaleString("ko-KR")
+      ];
+      cells.forEach(value => {
+        const td = document.createElement("td");
+        td.textContent = value;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    status.textContent = `총 ${members.length}명 등록 · 현재 ${visible.length}명 표시`;
+  }
+
+  async function loadRanking() {
+    try {
+      const response = await fetch(endpoint, { cache: "no-store" });
+      if (!response.ok) throw new Error("시트 응답 오류");
+      const raw = await response.text();
+      const start = raw.indexOf("{");
+      const end = raw.lastIndexOf("}");
+      if (start < 0 || end < start) throw new Error("시트 형식 오류");
+      const data = JSON.parse(raw.slice(start, end + 1));
+      if (data.status === "error") throw new Error("시트 접근 오류");
+
+      const rows = data.table.rows.map(r =>
+        (r.c || []).map(c => c ? (c.f ?? c.v ?? "") : "")
+      );
+      const headerIndex = rows.findIndex(r =>
+        r.includes("캐릭터명") && r.includes("직업") && r.includes("전투력")
+      );
+      if (headerIndex < 0) throw new Error("종합 시트의 제목 행을 찾을 수 없습니다.");
+
+      const headers = rows[headerIndex];
+      const col = name => headers.indexOf(name);
+      members = rows.slice(headerIndex + 1).map(r => ({
+        name: String(r[col("캐릭터명")] || "").trim(),
+        job: String(r[col("직업")] || "").trim(),
+        level: r[col("레벨")] || "",
+        power: Number(String(r[col("전투력")] || "0").replace(/,/g, ""))
+      })).filter(m => m.name && m.job && Number.isFinite(m.power));
+
+      render();
+    } catch (error) {
+      status.textContent = "데이터를 불러오지 못했습니다: " + error.message;
+    }
+  }
+
+  jobSelect.addEventListener("change", render);
+  searchInput.addEventListener("input", render);
+  loadRanking();
+})();
+</script>
+
+    
 
 <header>
     <div class="header-inner">
