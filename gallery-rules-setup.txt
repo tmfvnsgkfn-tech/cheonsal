@@ -1,10 +1,10 @@
 // Firebase Console > Firestore Database > 규칙 에서 기존 게시판 규칙을 지우지 말고
 // service cloud.firestore 안에 아래 match 블록을 추가하세요.
-// ADMIN_UID_HERE를 관리자 Firebase Authentication UID로 교체합니다.
+// 4wsmGJicudaNhZh0329QQVDZy112를 관리자 Firebase Authentication UID로 교체합니다.
 match /cheonsal_gallery/{photoId} {
   allow read: if true;
   allow create: if request.auth != null
-    && request.auth.uid == 'ADMIN_UID_HERE'
+    && request.auth.uid == '4wsmGJicudaNhZh0329QQVDZy112'
     && request.resource.data.keys().hasOnly(['title','category','description','url','path','createdAt','uid'])
     && request.resource.data.uid == request.auth.uid
     && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 80
@@ -13,14 +13,14 @@ match /cheonsal_gallery/{photoId} {
     && request.resource.data.url is string && request.resource.data.url.size() < 2048
     && request.resource.data.path is string && request.resource.data.path.matches('cheonsal_gallery/' + request.auth.uid + '/[^/]+')
     && request.resource.data.createdAt == request.time;
-  allow delete: if request.auth != null && request.auth.uid == 'ADMIN_UID_HERE';
+  allow delete: if request.auth != null && request.auth.uid == '4wsmGJicudaNhZh0329QQVDZy112';
   allow update: if false;
 }
 
 // Firebase Console > Storage > 규칙: 기존 storage 규칙의 service firebase.storage 안에 추가
 match /cheonsal_gallery/{userId}/{fileName} {
   allow read: if true;
-  allow write: if request.auth != null && request.auth.uid == 'ADMIN_UID_HERE'
+  allow write: if request.auth != null && request.auth.uid == '4wsmGJicudaNhZh0329QQVDZy112'
     && userId == request.auth.uid
     && (request.resource == null ||
       (request.resource.size < 10 * 1024 * 1024
