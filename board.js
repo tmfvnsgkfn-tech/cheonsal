@@ -56,5 +56,5 @@ if(!cfg?.apiKey||!cfg?.projectId||cfg.apiKey.includes('YOUR_')){
     });
    });
   },e=>{list.textContent='게시글 조회 실패: Firebase 설정을 확인해 주세요.';console.error(e)});
- }catch(e){setup.innerHTML='<span class="badge">게시판 연결 오류</span><p>Firebase 익명 인증 또는 데이터베이스 설정을 확인해 주세요.</p>';status.textContent='연결 실패';console.error(e)}
+ }catch(e){setup.innerHTML='<span class="badge">게시판 연결 오류</span><p>Firebase 익명 인증 또는 데이터베이스 설정을 확인해 주세요.</p>';status.textContent='연결 실패: '+(e.code||e.message||'알 수 없는 오류');const detail=document.createElement('p');detail.className='note';detail.textContent='오류 코드: '+(e.code||'없음')+' / '+(e.message||'');setup.appendChild(detail);console.error(e)}
 }
