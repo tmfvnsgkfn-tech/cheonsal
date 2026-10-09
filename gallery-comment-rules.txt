@@ -1,0 +1,14 @@
+// Firebase Console > Firestore Database > 규칙
+// 기존 cheonsal_posts 규칙을 유지하고, service cloud.firestore 안에 아래 match를 추가하세요.
+// 익명 인증 사용자만 댓글 작성 가능. 수정/삭제는 막습니다.
+match /cheonsal_gallery_comments/{photoId}/comments/{commentId} {
+  allow read: if true;
+  allow create: if request.auth != null
+    && request.resource.data.keys().hasOnly(['body','uid','createdAt'])
+    && request.resource.data.uid == request.auth.uid
+    && request.resource.data.body is string
+    && request.resource.data.body.size() > 0
+    && request.resource.data.body.size() <= 300
+    && request.resource.data.createdAt == request.time;
+  allow update, delete: if false;
+}
