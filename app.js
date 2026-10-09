@@ -3,7 +3,24 @@ const JOBS=['버서커','레인저','어쌔신','나이트','아티산','블레�
 const fmt=n=>Number(n||0).toLocaleString('ko-KR');let members=[];
 function clean(s){return String(s??'').trim()}function num(v){return Number(String(v??'').replace(/[^\d.-]/g,''))||0}
 function parseGViz(t){const a=t.indexOf('{'),b=t.lastIndexOf('}');if(a<0||b<0)throw Error('구글 시트 응답을 읽을 수 없습니다.');const d=JSON.parse(t.slice(a,b+1));if(d.status==='error')throw Error('시트 접근 오류: 공개 설정을 확인하세요.');return d.table}
-function parseMembers(table){const rows=(table.rows||[]).map(r=>(r.c||[]).map(c=>c?.f??c?.v??''));const labels=(table.cols||[]).map(c=>clean(c.label));let hi=rows.findIndex(r=>r.some(x=>/캐릭터명|닉네임|캐릭명/.test(clean(x)))&&r.some(x=>/직업|클래스/.test(clean(x))));const heads=hi>=0?rows[hi].map(clean):labels;const index=(re)=>heads.findIndex(h=>re.test(h));let ni=index(/캐릭터명|닉네임|캐릭명|이름/),ji=index(/직업|클래스/),pi=index(/전투력|투력/),li=index(/레벨|Lv|LV/i);if(ni<0||ji<0||pi<0)throw Error('시트에서 캐릭터명·직업·전투력 열을 찾지 못했습니다.');return rows.slice(hi>=0?hi+1:0).map(r=>({name:clean(r[ni]),job:clean(r[ji]),power:num(r[pi]),level:li>=0?num(r[li]):0})).filter(r=>r.name&&r.job&&r.power>0&& !/합계|총계/.test(r.name)).sort((a,b)=>b.power-a.power)}
+function parseMembers(table){
+ const rows=(table.rows||[]).map(r=>(r.c||[]).map(c=>c?.f??c?.v??''));
+ const labels=(table.cols||[]).map(c=>clean(c.label));
+ const patterns={name:/캐릭터|닉네임|캐릭명|이름|길드원/i,job:/직업|클래스|직군/i,power:/전투력|투력|power/i,level:/레벨|^lv$|level/i};
+ const candidates=[{heads:labels,start:0},...rows.slice(0,12).map((r,i)=>({heads:r.map(clean),start:i+1}))];
+ let best=null,bestScore=-1;
+ for(const c of candidates){const idx={};let score=0;for(const [k,re] of Object.entries(patterns)){idx[k]=c.heads.findIndex(h=>re.test(clean(h)));if(idx[k]>=0)score++}if(score>bestScore){best={...c,idx};bestScore=score}}
+ let {name:ni,job:ji,power:pi,level:li}=best.idx;
+ const data=rows.slice(best.start).filter(r=>r.some(v=>clean(v)));
+ const width=Math.max(labels.length,...rows.map(r=>r.length),0);
+ if(ji<0){const scores=Array.from({length:width},(_,i)=>data.filter(r=>JOBS.includes(clean(r[i]))).length);const max=Math.max(0,...scores);ji=max?scores.indexOf(max):-1}
+ if(pi<0){const scores=Array.from({length:width},(_,i)=>i===ji?-1:data.filter(r=>num(r[i])>=10000).length);const max=Math.max(0,...scores);pi=max?scores.indexOf(max):-1}
+ if(ni<0){const scores=Array.from({length:width},(_,i)=>i===ji||i===pi?-1:data.filter(r=>{const v=clean(r[i]);return v.length>0&&v.length<30&&!/^[-+]?\\d[\\d,.]*$/.test(v)&&!JOBS.includes(v)}).length);const max=Math.max(0,...scores);ni=max?scores.indexOf(max):-1}
+ if(ni<0||ji<0||pi<0)throw Error('시트에서 캐릭터명·직업·전투력 열을 인식하지 못했습니다.');
+ const found=data.map(r=>({name:clean(r[ni]),job:clean(r[ji]),power:num(r[pi]),level:li>=0?num(r[li]):0})).filter(r=>r.name&&JOBS.includes(r.job)&&r.power>0&&!/합계|총계/.test(r.name)).sort((a,b)=>b.power-a.power);
+ if(!found.length)throw Error('시트에서 유효한 길드원 데이터를 찾지 못했습니다.');
+ return found;
+}
 function el(id){return document.getElementById(id)}function put(id,s){if(el(id))el(id).textContent=s}
 function setupFilters(){let select=el('job');if(select)select.innerHTML='<option value="">전체 직업</option>'+JOBS.map(j=>`<option value="${j}">${j}</option>`).join('');el('search')?.addEventListener('input',render);select?.addEventListener('change',render);el('refresh')?.addEventListener('click',load)}
 function filtered(){const q=clean(el('search')?.value).toLowerCase(),j=el('job')?.value;return members.filter(m=>(!j||m.job===j)&&(!q||m.name.toLowerCase().includes(q)))}
