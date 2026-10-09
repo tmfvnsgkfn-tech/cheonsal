@@ -28,20 +28,27 @@ function td(tr,v,cls){let c=document.createElement('td');c.textContent=v;if(cls)
 function render(){let tbody=el('rows');if(tbody){tbody.replaceChildren();let all=filtered();all.forEach((m,i)=>{let tr=document.createElement('tr');let global=members.indexOf(m)+1;td(tr,global+'위',global<=3?'rank'+global:'');td(tr,m.name);td(tr,m.job);td(tr,m.level?fmt(m.level):'-');td(tr,fmt(m.power));tbody.append(tr)});put('count',`${all.length}명 표시 / 전체 ${members.length}명`)}if(el('toprows')){el('toprows').replaceChildren();members.slice(0,5).forEach((m,i)=>{let tr=document.createElement('tr');td(tr,(i+1)+'위','rank'+(i+1));td(tr,m.name);td(tr,m.job);td(tr,fmt(m.power));el('toprows').append(tr)})}const total=members.reduce((s,m)=>s+m.power,0);put('total',fmt(members.length));put('avg',fmt(members.length?Math.round(total/members.length):0));put('max',fmt(members[0]?.power||0));put('jobcount',fmt(new Set(members.map(m=>m.job)).size));let jt=el('jobrows');if(jt){jt.replaceChildren();JOBS.forEach(j=>{let a=members.filter(m=>m.job===j);if(!a.length)return;let tr=document.createElement('tr');td(tr,j);td(tr,fmt(a.length));td(tr,fmt(Math.round(a.reduce((s,m)=>s+m.power,0)/a.length)));td(tr,fmt(Math.max(...a.map(m=>m.power))));jt.append(tr)})}renderGrowth()}
 function snapshot(){try{const key='cheonsal_history_v1',list=JSON.parse(localStorage.getItem(key)||'[]'),today=new Date().toLocaleDateString('en-CA');let i=list.findIndex(x=>x.date===today);const item={date:today,players:members.map(m=>({name:m.name,power:m.power}))};if(i>=0)list[i]=item;else list.push(item);localStorage.setItem(key,JSON.stringify(list.slice(-90)))}catch(e){}}
 function renderGrowth(){let t=el('growrows');if(!t)return;t.replaceChildren();let list=[];try{list=JSON.parse(localStorage.getItem('cheonsal_history_v1')||'[]')}catch(e){}const today=new Date().toLocaleDateString('en-CA'),previous=[...list].reverse().find(x=>x.date!==today);put('baseline',previous?'비교 기준: '+previous.date:'이 브라우저에 이전 날짜 기록이 없습니다. 다른 날 다시 접속하면 비교할 수 있습니다.');if(!previous)return;const old=new Map(previous.players.map(p=>[p.name,p.power]));members.filter(m=>old.has(m.name)).map(m=>({...m,change:m.power-old.get(m.name)})).sort((a,b)=>b.change-a.change).forEach((m,i)=>{let tr=document.createElement('tr');td(tr,i+1);td(tr,m.name);td(tr,fmt(m.power));td(tr,(m.change>0?'+':'')+fmt(m.change));t.append(tr)})}
+function fetchGVizJSONP(gid){
+ return new Promise((resolve,reject)=>{
+  const callback='cheonsalGviz_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+  const script=document.createElement('script');
+  const timeout=setTimeout(()=>finish(new Error('구글 시트 응답 시간 초과')),12000);
+  function finish(err,data){clearTimeout(timeout);delete window[callback];script.remove();err?reject(err):resolve(data)}
+  window[callback]=data=>finish(null,data);
+  script.onerror=()=>finish(new Error('구글 시트 스크립트 연결 실패'));
+  script.src=`https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?gid=${gid}&tqx=out:json;responseHandler:${callback}&_=${Date.now()}`;
+  document.head.appendChild(script);
+ });
+}
 async function load(){
  put('status','구글 시트 불러오는 중…');
- const urls=[
-  `https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?gid=${GID}&tqx=out:json`,
-  `https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?tqx=out:json`,
-  `https://docs.google.com/spreadsheets/d/${SHEET}/gviz/tq?gid=0&tqx=out:json`
- ];
  const errors=[];
- for(const url of urls){
+ for(const gid of [GID,'0']){
   try{
-   const r=await fetch(url+'&_='+Date.now(),{cache:'no-store'});
-   if(!r.ok)throw Error('HTTP '+r.status);
-   const parsed=parseMembers(parseGViz(await r.text()));
-   members=parsed;snapshot();render();
+   const result=await fetchGVizJSONP(gid);
+   if(result.status==='error')throw Error('구글 시트 접근 권한 또는 탭 오류');
+   members=parseMembers(result.table);
+   snapshot();render();
    put('status','연동 완료 · '+members.length+'명 · '+new Date().toLocaleTimeString('ko-KR')+' 기준');
    return;
   }catch(e){errors.push(e.message);console.warn('천살 시트 조회 실패:',e)}
