@@ -5,7 +5,7 @@ const $=id=>document.getElementById(id);
 const safe=s=>{const el=document.createElement('span');el.textContent=String(s??'');return el.innerHTML};
 const setup=$('boardSetup'),status=$('postStatus'),submit=$('postSubmit'),list=$('postList');
 let cfg;
-try{const m=await import('./firebase-config.js');cfg=m.firebaseConfig}catch(e){}
+try{const m=await import('./firebase-config.js?v=20261009h');cfg=m.firebaseConfig}catch(e){}
 if(!cfg?.apiKey||!cfg?.projectId||cfg.apiKey.includes('YOUR_')){
  setup.innerHTML='<span class="badge">게시판 준비 중</span><p>게시글 저장 서비스가 아직 연결되지 않았습니다. 운영진이 Firebase 설정을 완료하면 누구나 닉네임으로 글을 쓸 수 있습니다.</p>';
  status.textContent='연결 전에는 글을 저장할 수 없습니다.';
